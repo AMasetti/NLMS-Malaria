@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[4]:
+
+
 # Vamos a arrancar cargando los parametros iniciales que estimamos
 Vmax = 30
 Ks1 = 200
@@ -5,7 +11,9 @@ Ks2 = 100
 Alpha = 0.5
 Beta = 0.3
 
-start = np.array([Vmax, Ks1, Ks2, Alpha, Beta])
+
+# In[5]:
+
 
 import scipy.optimize as optimization  # Scipy: Necesitamos esta libreria para hacer el Metodo de Minimos Cuadrados
 import numpy as np                     # Numpy: complementa a la anterior y nos deja usar matrices onda Matlab 
@@ -34,6 +42,10 @@ A = np.array(A)
 B = np.array(B)
 V = np.array(V)
 
+
+# In[9]:
+
+
 # Vamos a definir nuestra funcion a fittear
 
 def f(var_indep, Vmax, Ks1, Ks2, Alpha, Beta):
@@ -41,6 +53,8 @@ def f(var_indep, Vmax, Ks1, Ks2, Alpha, Beta):
     num = Vmax * ( (A/Ks1) + ( (Beta*A*B) / (Alpha*Ks1*Ks2) ) )
     denom = 1 + (A/Ks1) + (B/Ks2) +( (A*B) / (Alpha*Ks1*Ks2))
     return num/denom
+
+start = np.array([Vmax, Ks1, Ks2, Alpha, Beta])
 
 popt, pcov = optimization.curve_fit(f, (A, B), V, start)
 
@@ -51,3 +65,15 @@ print(f'Ks1:   {popt[1]} ± {std_dev[1]}')
 print(f'Ks2:   {popt[2]} ± {std_dev[2]}')
 print(f'Alpha: {popt[3]} ± {std_dev[3]}')
 print(f'Beta:  {popt[4]} ± {std_dev[4]}')
+
+residuals =  V - f((A, B), *popt)
+RSS = np.sum(residuals**2)
+
+print(f'RSS:   {RSS}')
+
+
+# In[ ]:
+
+
+
+
